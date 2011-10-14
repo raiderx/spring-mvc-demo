@@ -53,6 +53,6 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     public Event getEventById(int eventId) {
-        return eventDao.getEventById(eventId);
+        return eventDao.getById(eventId);
     }
 }

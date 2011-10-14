@@ -23,7 +23,7 @@ public class CategoryDaoImpl extends AbstractEntityDaoImpl<Category> implements 
      */
     @Override
     public List<Category> getCategoriesBySearchCriteria(CategorySearchCriteria criteria) {
-        List<Category> categories = getAllCategories();
+        List<Category> categories = getAllEntities();
         List<Category> result = new ArrayList<Category>();
         for (Category category : categories) {
             if (doesCategorySatisfyCriteria(category, criteria)) {
@@ -33,7 +33,34 @@ public class CategoryDaoImpl extends AbstractEntityDaoImpl<Category> implements 
         return sortEntities(result, criteria);
     }
 
-    private List<Category> getAllCategories() {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Comparator<Category> createComparator(SearchCriteria criteria) {
+        final boolean sortByName = "name".equals(criteria.getSortColumn().toLowerCase());
+        final boolean sortByDescription = "description".equals(criteria.getSortColumn().toLowerCase());
+        final int multiplier = "asc".equals(criteria.getSortOrder().toLowerCase()) ? 1 : -1;
+        Comparator<Category> comparator = new Comparator<Category>() {
+            @Override
+            public int compare(Category c1, Category c2) {
+                if (sortByName) {
+                    return c1.getName().compareTo(c2.getName()) * multiplier;
+                }
+                if (sortByDescription) {
+                    return c1.getDescription().compareTo(c2.getDescription()) * multiplier;
+                }
+                return 0;
+            }
+        };
+        return comparator;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected List<Category> getAllEntities() {
         List<Category> categories = new ArrayList<Category>();
         categories.add(new Category(1, "Y", "General", true));
         categories.add(new Category(1, "Y16", "Public junior", true));
@@ -53,25 +80,5 @@ public class CategoryDaoImpl extends AbstractEntityDaoImpl<Category> implements 
             }
         }
         return true;
-    }
-
-    @Override
-    protected Comparator<Category> createComparator(SearchCriteria criteria) {
-        final boolean sortByName = "name".equals(criteria.getSortColumn().toLowerCase());
-        final boolean sortByDescription = "description".equals(criteria.getSortColumn().toLowerCase());
-        final int multiplier = "asc".equals(criteria.getSortOrder().toLowerCase()) ? 1 : -1;
-        Comparator<Category> comparator = new Comparator<Category>() {
-            @Override
-            public int compare(Category c1, Category c2) {
-                if (sortByName) {
-                    return c1.getName().compareTo(c2.getName()) * multiplier;
-                }
-                if (sortByDescription) {
-                    return c1.getDescription().compareTo(c2.getDescription()) * multiplier;
-                }
-                return 0;
-            }
-        };
-        return comparator;
     }
 }

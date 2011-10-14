@@ -22,4 +22,11 @@ public interface DisciplineService {
      * @return list of disciplines
      */
     List<Discipline> getDisciplinesByCriteria(DisciplineSearchCriteria criteria);
+
+    /**
+     * Returns discipline found by given discipline id
+     * @param disciplineId discipline id
+     * @return discipline
+     */
+    Discipline getDisciplineById(int disciplineId);
 }

@@ -23,4 +23,10 @@ public interface CategoryService {
      * @return list of categories
      */
     List<Category> getCategoriesByEventId(int eventId);
+
+    /**
+     * Returns list of all categories
+     * @return list of all categories
+     */
+    List<Category> getAllCategories();
 }

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author Pavel Karpukhin
  */
-public interface DisciplineDao {
+public interface DisciplineDao extends EntityDao<Discipline> {
 
     /**
      * Returns list of disciplines found by given search criteria

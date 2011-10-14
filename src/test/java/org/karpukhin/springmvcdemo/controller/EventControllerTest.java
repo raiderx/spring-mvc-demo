@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.karpukhin.springmvcdemo.dto.EventSearchCriteria;
 import org.karpukhin.springmvcdemo.model.Event;
+import org.karpukhin.springmvcdemo.service.CategoryService;
 import org.karpukhin.springmvcdemo.service.EventService;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,13 +19,15 @@ public class EventControllerTest {
 
     private static final int DISCIPLINE_ID = 123;
 
+    private CategoryService categoryService;
     private EventService eventService;
     private EventController eventController;
 
     @Before
     public void setUp() {
+        categoryService = mock(CategoryService.class);
         eventService = mock(EventService.class);
-        eventController = new EventController(eventService);
+        eventController = new EventController(categoryService, eventService);
     }
 
     @Test

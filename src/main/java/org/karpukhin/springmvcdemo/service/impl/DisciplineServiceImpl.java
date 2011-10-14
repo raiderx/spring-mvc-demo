@@ -34,4 +34,12 @@ public class DisciplineServiceImpl implements DisciplineService {
     public List<Discipline> getDisciplinesByCriteria(DisciplineSearchCriteria criteria) {
         return disciplineDao.getDisciplinesByCriteria(criteria);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Discipline getDisciplineById(int disciplineId) {
+        return disciplineDao.getById(disciplineId);
+    }
 }

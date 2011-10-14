@@ -2,6 +2,8 @@ package org.karpukhin.springmvcdemo.dao.impl;
 
 import org.karpukhin.springmvcdemo.dao.EventDao;
 import org.karpukhin.springmvcdemo.dto.EventSearchCriteria;
+import org.karpukhin.springmvcdemo.dto.SearchCriteria;
+import org.karpukhin.springmvcdemo.model.Entity;
 import org.karpukhin.springmvcdemo.model.Event;
 import org.springframework.stereotype.Repository;
 
@@ -14,14 +16,14 @@ import java.util.List;
  * @author Pavel Karpukhin
  */
 @Repository
-public class EventDaoImpl implements EventDao {
+public class EventDaoImpl extends AbstractEntityDaoImpl<Event> implements EventDao {
 
     /**
      * {@inheritDoc}
      */
     @Override
     public List<Event> getEventsBySearchCriteria(EventSearchCriteria criteria) {
-        List<Event> events = getAllEvents();
+        List<Event> events = getAllEntities();
         List<Event> result = new ArrayList<Event>();
         for (Event event : events) {
             if (doesDisciplineSatisfyCriteria(event, criteria)) {
@@ -29,9 +31,12 @@ public class EventDaoImpl implements EventDao {
             }
         }
 
-        return sortEvents(result, criteria);
+        return sortEntities(result, criteria);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Event> getEventsByDisciplineId(int disciplineId) {
         EventSearchCriteria criteria = new EventSearchCriteria();
@@ -43,17 +48,7 @@ public class EventDaoImpl implements EventDao {
      * {@inheritDoc}
      */
     @Override
-    public Event getEventById(int eventId) {
-        List<Event> events = getAllEvents();
-        for (Event event : events) {
-            if (event.getId() == eventId) {
-                return event;
-            }
-        }
-        return null;
-    }
-
-    private List<Event> getAllEvents() {
+    protected List<Event> getAllEntities() {
         List<Event> events = new ArrayList<Event>();
         events.add(new Event(1, "Air rifle 60 shots", 1, true));
         events.add(new Event(2, "Air rifle 40 shots", 1, true));
@@ -82,6 +77,25 @@ public class EventDaoImpl implements EventDao {
         return events;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Comparator<Event> createComparator(SearchCriteria<Event> criteria) {
+        final boolean sortByName = "name".equals(criteria.getSortColumn().toLowerCase());
+        final int multiplier = "asc".equals(criteria.getSortOrder().toLowerCase()) ? 1 : -1;
+        Comparator<Event> comparator = new Comparator<Event>() {
+            @Override
+            public int compare(Event e1, Event e2) {
+                if (sortByName) {
+                    return e1.getName().compareTo(e2.getName()) * multiplier;
+                }
+                return multiplier;
+            }
+        };
+        return comparator;
+    }
+
     private boolean doesDisciplineSatisfyCriteria(Event event, EventSearchCriteria criteria) {
         if (event != null && criteria != null) {
             if (criteria.getExample().getActive() != null && event.getActive() != criteria.getExample().getActive()) {
@@ -95,24 +109,5 @@ public class EventDaoImpl implements EventDao {
             }
         }
         return true;
-    }
-
-    private List<Event> sortEvents(List<Event> events, EventSearchCriteria criteria) {
-        if (criteria == null || criteria.getSortColumn() == null) {
-            return events;
-        }
-        final boolean sortByName = "name".equals(criteria.getSortColumn().toLowerCase());
-        final int multiplier = "asc".equals(criteria.getSortOrder().toLowerCase()) ? 1 : -1;
-        Comparator<Event> comparator = new Comparator<Event>() {
-            @Override
-            public int compare(Event d1, Event d2) {
-                if (sortByName) {
-                    return d1.getName().compareTo(d2.getName()) * multiplier;
-                }
-                return multiplier;
-            }
-        };
-        Collections.sort(events, comparator);
-        return events;
     }
 }

@@ -53,9 +53,9 @@ public class EventServiceImplTest {
     @Test
     public void testGetEventById() {
         Event event = mock(Event.class);
-        when(eventDao.getEventById(EVENT_ID)).thenReturn(event);
+        when(eventDao.getById(EVENT_ID)).thenReturn(event);
         Event result = eventService.getEventById(EVENT_ID);
         assertNotNull(result);
-        verify(eventDao).getEventById(EVENT_ID);
+        verify(eventDao).getById(EVENT_ID);
     }
 }

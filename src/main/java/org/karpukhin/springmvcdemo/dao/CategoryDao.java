@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author Pavel Karpukhin
  */
-public interface CategoryDao {
+public interface CategoryDao extends EntityDao<Category> {
 
     /**
      * Returns list of categories found by given search criteria

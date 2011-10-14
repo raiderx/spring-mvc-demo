@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author Pavel Karpukhin
  */
-public interface EventDao {
+public interface EventDao extends EntityDao<Event> {
 
     /**
      * Returns list of events found by given search criteria
@@ -23,11 +23,4 @@ public interface EventDao {
      * @return list of events
      */
     List<Event> getEventsByDisciplineId(int disciplineId);
-
-    /**
-     * Returns event found by given id
-     * @param eventId event id
-     * @return event
-     */
-    Event getEventById(int eventId);
 }

@@ -2,6 +2,7 @@ package org.karpukhin.springmvcdemo.dao.impl;
 
 import org.karpukhin.springmvcdemo.dao.CompetitionDao;
 import org.karpukhin.springmvcdemo.dto.CompetitionSearchCriteria;
+import org.karpukhin.springmvcdemo.dto.SearchCriteria;
 import org.karpukhin.springmvcdemo.model.Competition;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +12,7 @@ import java.util.*;
  * @author Pavel Karpukhin
  */
 @Repository
-public class CompetitionDaoImpl implements CompetitionDao {
+public class CompetitionDaoImpl extends AbstractEntityDaoImpl<Competition> implements CompetitionDao {
 
     /**
      * {@inheritDoc}
@@ -26,7 +27,7 @@ public class CompetitionDaoImpl implements CompetitionDao {
      */
     @Override
     public List<Competition> getCompetitionsByCriteria(CompetitionSearchCriteria criteria) {
-        List<Competition> competitions = getAllCompetitions();
+        List<Competition> competitions = getAllEntities();
         List<Competition> result = new ArrayList<Competition>();
         for (Competition competition : competitions) {
             if (doesCompetitionSatisfyCriteria(competition, criteria)) {
@@ -35,10 +36,14 @@ public class CompetitionDaoImpl implements CompetitionDao {
 
         }
 
-        return sortCompetitions(result, criteria);
+        return sortEntities(result, criteria);
     }
 
-    private static List<Competition> getAllCompetitions() {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected List<Competition> getAllEntities() {
         Calendar calendar = Calendar.getInstance();
         List<Competition> result = new ArrayList<Competition>();
         result.add(new Competition(1, "Some competition", getDate(calendar, 2011, 9, 19), getDate(calendar, 2011, 9, 23), true));
@@ -59,6 +64,25 @@ public class CompetitionDaoImpl implements CompetitionDao {
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Comparator<Competition> createComparator(SearchCriteria<Competition> criteria) {
+        final boolean sortByName = "name".equals(criteria.getSortColumn().toLowerCase());
+        final int multiplier = "asc".equals(criteria.getSortOrder().toLowerCase()) ? 1 : -1;
+        Comparator<Competition> comparator = new Comparator<Competition>() {
+            @Override
+            public int compare(Competition c1, Competition c2) {
+                if (sortByName) {
+                    return c1.getName().compareTo(c2.getName()) * multiplier;
+                }
+                return 0;
+            }
+        };
+        return comparator;
+    }
+
     private static boolean doesCompetitionSatisfyCriteria(Competition competition, CompetitionSearchCriteria criteria) {
         if (competition != null && criteria != null) {
             if (criteria.getExample().getActive() != null && competition.getActive() != criteria.getExample().getActive()) {
@@ -74,24 +98,5 @@ public class CompetitionDaoImpl implements CompetitionDao {
     private static Date getDate(Calendar calendar, int year, int month, int day) {
         calendar.set(year, month, day);
         return calendar.getTime();
-    }
-
-    private static List<Competition> sortCompetitions(List<Competition> competitions, CompetitionSearchCriteria criteria) {
-        if (criteria == null || criteria.getSortColumn() == null) {
-            return competitions;
-        }
-        final boolean sortByName = "name".equals(criteria.getSortColumn().toLowerCase());
-        final int multiplier = "asc".equals(criteria.getSortOrder().toLowerCase()) ? 1 : -1;
-        Comparator<Competition> comparator = new Comparator<Competition>() {
-            @Override
-            public int compare(Competition c1, Competition c2) {
-                if (sortByName) {
-                    return c1.getName().compareTo(c2.getName()) * multiplier;
-                }
-                return 0;
-            }
-        };
-        Collections.sort(competitions, comparator);
-        return competitions;
     }
 }

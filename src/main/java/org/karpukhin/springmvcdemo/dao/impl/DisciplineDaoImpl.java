@@ -19,7 +19,7 @@ public class DisciplineDaoImpl extends AbstractEntityDaoImpl<Discipline> impleme
      */
     @Override
     public List<Discipline> getDisciplinesByCriteria(DisciplineSearchCriteria criteria) {
-        List<Discipline> disciplines = getAllDisciplines();
+        List<Discipline> disciplines = getAllEntities();
         List<Discipline> result = new ArrayList<Discipline>();
         for (Discipline discipline : disciplines) {
             if (doesDisciplineSatisfyCriteria(discipline, criteria)) {
@@ -30,7 +30,30 @@ public class DisciplineDaoImpl extends AbstractEntityDaoImpl<Discipline> impleme
         return sortEntities(result, criteria);
     }
 
-    private static List<Discipline> getAllDisciplines() {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Comparator<Discipline> createComparator(SearchCriteria criteria) {
+        final boolean sortByName = "name".equals(criteria.getSortColumn().toLowerCase());
+        final int multiplier = "asc".equals(criteria.getSortOrder().toLowerCase()) ? 1 : -1;
+        Comparator<Discipline> comparator = new Comparator<Discipline>() {
+            @Override
+            public int compare(Discipline d1, Discipline d2) {
+                if (sortByName) {
+                    return d1.getName().compareTo(d2.getName()) * multiplier;
+                }
+                return 0;
+            }
+        };
+        return comparator;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected List<Discipline> getAllEntities() {
         List<Discipline> disciplines = new ArrayList<Discipline>();
         disciplines.add(new Discipline(1, "Rifle", true));
         disciplines.add(new Discipline(2, "Pistol", true));
@@ -53,21 +76,5 @@ public class DisciplineDaoImpl extends AbstractEntityDaoImpl<Discipline> impleme
             }
         }
         return true;
-    }
-
-    @Override
-    protected Comparator<Discipline> createComparator(SearchCriteria criteria) {
-        final boolean sortByName = "name".equals(criteria.getSortColumn().toLowerCase());
-        final int multiplier = "asc".equals(criteria.getSortOrder().toLowerCase()) ? 1 : -1;
-        Comparator<Discipline> comparator = new Comparator<Discipline>() {
-            @Override
-            public int compare(Discipline d1, Discipline d2) {
-                if (sortByName) {
-                    return d1.getName().compareTo(d2.getName()) * multiplier;
-                }
-                return 0;
-            }
-        };
-        return comparator;
     }
 }

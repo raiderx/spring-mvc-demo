@@ -48,4 +48,10 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> getCategoriesByEventId(int eventId) {
         return new ArrayList<Category>();
     }
+
+    @Override
+    public List<Category> getAllCategories() {
+        CategorySearchCriteria criteria = new CategorySearchCriteria();
+        return categoryDao.getCategoriesBySearchCriteria(criteria);
+    }
 }

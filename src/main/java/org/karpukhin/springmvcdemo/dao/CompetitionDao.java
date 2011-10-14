@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author Pavel Karpukhin
  */
-public interface CompetitionDao {
+public interface CompetitionDao extends EntityDao<Competition> {
 
 	/**
 	 * Creates new competition
