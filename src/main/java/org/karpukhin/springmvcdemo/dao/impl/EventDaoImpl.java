@@ -32,6 +32,13 @@ public class EventDaoImpl implements EventDao {
         return sortEvents(result, criteria);
     }
 
+    @Override
+    public List<Event> getEventsByDisciplineId(int disciplineId) {
+        EventSearchCriteria criteria = new EventSearchCriteria();
+        criteria.getExample().setDisciplineId(disciplineId);
+        return getEventsBySearchCriteria(criteria);
+    }
+
     /**
      * {@inheritDoc}
      */

@@ -19,6 +19,20 @@ public class EventServiceImpl implements EventService {
     private EventDao eventDao;
 
     /**
+     * Default constructor
+     */
+    public EventServiceImpl() {
+    }
+
+    /**
+     * Constructs object with given {@link EventDao} implementation
+     * @param eventDao {@link EventDao} implementation
+     */
+    public EventServiceImpl(EventDao eventDao) {
+        this.eventDao = eventDao;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -30,10 +44,8 @@ public class EventServiceImpl implements EventService {
      * {@inheritDoc}
      */
     @Override
-    public List<Event> getEventByDisciplineId(int disciplineId) {
-        EventSearchCriteria criteria = new EventSearchCriteria();
-        criteria.getExample().setDisciplineId(disciplineId);
-        return eventDao.getEventsBySearchCriteria(criteria);
+    public List<Event> getEventsByDisciplineId(int disciplineId) {
+        return eventDao.getEventsByDisciplineId(disciplineId);
     }
 
     /**

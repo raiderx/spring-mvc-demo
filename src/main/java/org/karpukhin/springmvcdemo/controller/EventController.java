@@ -26,9 +26,19 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
+    /**
+     * Default constructor
+     */
+    public EventController() {
+    }
+
+    public EventController(EventService eventService) {
+        this.eventService = eventService;
+    }
+
     @RequestMapping("/disciplines/{disciplineId}/events")
-    public ModelAndView getEventsList(@PathVariable("disciplineId") int disciplineId,
-                                      @ModelAttribute("criteria") EventSearchCriteria criteria) {
+    public ModelAndView getEventList(@PathVariable("disciplineId") int disciplineId,
+                                     @ModelAttribute("criteria") EventSearchCriteria criteria) {
         criteria.getExample().setDisciplineId(disciplineId);
         List<Event> events = eventService.getEventsBySearchCriteria(criteria);
         PagedListHolder<Event> result = new PagedListHolder<Event>(events);

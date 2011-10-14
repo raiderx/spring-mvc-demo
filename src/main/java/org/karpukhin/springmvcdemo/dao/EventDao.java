@@ -18,6 +18,13 @@ public interface EventDao {
     List<Event> getEventsBySearchCriteria(EventSearchCriteria criteria);
 
     /**
+     * Returns list of events found by given discipline id
+     * @param disciplineId discipline id
+     * @return list of events
+     */
+    List<Event> getEventsByDisciplineId(int disciplineId);
+
+    /**
      * Returns event found by given id
      * @param eventId event id
      * @return event

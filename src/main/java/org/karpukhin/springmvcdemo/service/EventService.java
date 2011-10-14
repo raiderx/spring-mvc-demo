@@ -22,7 +22,7 @@ public interface EventService {
      * @param disciplineId discipline id
      * @return list of events
      */
-    List<Event> getEventByDisciplineId(int disciplineId);
+    List<Event> getEventsByDisciplineId(int disciplineId);
 
     /**
      * Returns event found by given id
