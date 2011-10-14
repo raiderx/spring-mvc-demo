@@ -35,11 +35,15 @@ public class DisciplineDaoImpl extends AbstractEntityDaoImpl<Discipline> impleme
      */
     @Override
     protected Comparator<Discipline> createComparator(SearchCriteria criteria) {
+        final boolean sortById = "id".equals(criteria.getSortColumn().toLowerCase());
         final boolean sortByName = "name".equals(criteria.getSortColumn().toLowerCase());
         final int multiplier = "asc".equals(criteria.getSortOrder().toLowerCase()) ? 1 : -1;
         Comparator<Discipline> comparator = new Comparator<Discipline>() {
             @Override
             public int compare(Discipline d1, Discipline d2) {
+                if (sortById) {
+                    return d1.getId().compareTo(d2.getId()) * multiplier;
+                }
                 if (sortByName) {
                     return d1.getName().compareTo(d2.getName()) * multiplier;
                 }

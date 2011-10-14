@@ -3,12 +3,10 @@ package org.karpukhin.springmvcdemo.dao.impl;
 import org.karpukhin.springmvcdemo.dao.EventDao;
 import org.karpukhin.springmvcdemo.dto.EventSearchCriteria;
 import org.karpukhin.springmvcdemo.dto.SearchCriteria;
-import org.karpukhin.springmvcdemo.model.Entity;
 import org.karpukhin.springmvcdemo.model.Event;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -82,11 +80,15 @@ public class EventDaoImpl extends AbstractEntityDaoImpl<Event> implements EventD
      */
     @Override
     protected Comparator<Event> createComparator(SearchCriteria<Event> criteria) {
+        final boolean sortById = "id".equals(criteria.getSortColumn().toLowerCase());
         final boolean sortByName = "name".equals(criteria.getSortColumn().toLowerCase());
         final int multiplier = "asc".equals(criteria.getSortOrder().toLowerCase()) ? 1 : -1;
         Comparator<Event> comparator = new Comparator<Event>() {
             @Override
             public int compare(Event e1, Event e2) {
+                if (sortById) {
+                    return e1.getId().compareTo(e2.getId()) * multiplier;
+                }
                 if (sortByName) {
                     return e1.getName().compareTo(e2.getName()) * multiplier;
                 }

@@ -4,11 +4,9 @@ import org.karpukhin.springmvcdemo.dao.CategoryDao;
 import org.karpukhin.springmvcdemo.dto.CategorySearchCriteria;
 import org.karpukhin.springmvcdemo.dto.SearchCriteria;
 import org.karpukhin.springmvcdemo.model.Category;
-import org.karpukhin.springmvcdemo.model.Entity;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -38,12 +36,16 @@ public class CategoryDaoImpl extends AbstractEntityDaoImpl<Category> implements 
      */
     @Override
     protected Comparator<Category> createComparator(SearchCriteria criteria) {
+        final boolean sortById = "id".equals(criteria.getSortColumn().toLowerCase());
         final boolean sortByName = "name".equals(criteria.getSortColumn().toLowerCase());
         final boolean sortByDescription = "description".equals(criteria.getSortColumn().toLowerCase());
         final int multiplier = "asc".equals(criteria.getSortOrder().toLowerCase()) ? 1 : -1;
         Comparator<Category> comparator = new Comparator<Category>() {
             @Override
             public int compare(Category c1, Category c2) {
+                if (sortById) {
+                    return c1.getId().compareTo(c2.getId()) * multiplier;
+                }
                 if (sortByName) {
                     return c1.getName().compareTo(c2.getName()) * multiplier;
                 }

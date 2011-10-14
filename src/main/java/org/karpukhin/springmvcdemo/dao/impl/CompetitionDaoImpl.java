@@ -69,11 +69,15 @@ public class CompetitionDaoImpl extends AbstractEntityDaoImpl<Competition> imple
      */
     @Override
     protected Comparator<Competition> createComparator(SearchCriteria<Competition> criteria) {
+        final boolean sortById = "id".equals(criteria.getSortColumn().toLowerCase());
         final boolean sortByName = "name".equals(criteria.getSortColumn().toLowerCase());
         final int multiplier = "asc".equals(criteria.getSortOrder().toLowerCase()) ? 1 : -1;
         Comparator<Competition> comparator = new Comparator<Competition>() {
             @Override
             public int compare(Competition c1, Competition c2) {
+                if (sortById) {
+                    return c1.getId().compareTo(c2.getId()) * multiplier;
+                }
                 if (sortByName) {
                     return c1.getName().compareTo(c2.getName()) * multiplier;
                 }

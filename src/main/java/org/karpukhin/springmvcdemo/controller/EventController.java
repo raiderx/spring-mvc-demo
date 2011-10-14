@@ -92,8 +92,8 @@ public class EventController {
 
     @RequestMapping(value = "/events/{eventId}", method = RequestMethod.POST)
     public ModelAndView saveEditedEvent(@PathVariable("eventId") int eventId,
-                                        @ModelAttribute("event") EditEventDto editEventDto) {
-        return new ModelAndView("redirect:/disciplines/" + editEventDto.getDisciplineId() + "/events.html");
+                                        @ModelAttribute("event") EditEventDto eventDto) {
+        return new ModelAndView("redirect:/disciplines/" + eventDto.getDisciplineId() + "/events.html");
     }
 
     private List<Integer> getCategoryIds(List<Category> categories) {

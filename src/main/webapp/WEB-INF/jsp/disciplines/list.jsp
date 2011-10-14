@@ -12,30 +12,6 @@
 		<title> Disciplines </title>
         <link href="${pageContext.request.contextPath}/css/default.css" rel="stylesheet" type="text/css"/>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.6.4.js"> </script>
-		<script type="text/javascript">
-			$(function() {
-                $("#disciplineTable thead td[sortableColumn]").click(function() {
-                    if ($("#sortColumn").val() != $(this).attr("sortableColumn")) {
-                        $("#sortOrder").val("asc");
-                        $("#sortColumn").val($(this).attr("sortableColumn"));
-                    } else {
-                        if ($("#sortOrder").val() == "asc") {
-                            $("#sortOrder").val("desc");
-                        } else {
-                            $("#sortOrder").val("asc");
-                        }
-                    }
-                    $("#filterForm").trigger("submit");
-                });
-                $("#disciplineTable .activityFilter").change(function() {
-                    $("#example_active").val($(this).val());
-                    $("#filterForm").trigger("submit");
-                })
-                <c:if test="${criteria.example.active != null}">
-                $("#disciplineTable .activityFilter option[value='<c:out value="${criteria.example.active}"/>']").attr("selected", "selected");
-                </c:if>
-			});
-		</script>
 	</head>
 	<body>
         <h1> Disciplines </h1>
@@ -81,6 +57,7 @@
                     </td>
 					<td align="right">
                         <c:if test="${discipline.active == true}">
+                            <button onclick="editDiscipline(${discipline.id});"> Edit </button>
                             <button onclick="deleteDiscipline(${discipline.id});"> Delete </button>
                         </c:if>
                         <c:if test="${discipline.active ==false}">
@@ -91,7 +68,7 @@
 			</c:forEach>
 			<c:if test="${empty disciplines}">
 				<tr>
-					<td colspan="2"> No data that satisfy filter </td>
+					<td colspan="3"> No data that satisfy filter </td>
 				</tr>
 			</c:if>
 			</table>
@@ -111,5 +88,32 @@
             </table>
 		</div>
 
+        <script type="text/javascript">
+            $(function() {
+                $("#disciplineTable thead td[sortableColumn]").click(function() {
+                    if ($("#sortColumn").val() != $(this).attr("sortableColumn")) {
+                        $("#sortOrder").val("asc");
+                        $("#sortColumn").val($(this).attr("sortableColumn"));
+                    } else {
+                        if ($("#sortOrder").val() == "asc") {
+                            $("#sortOrder").val("desc");
+                        } else {
+                            $("#sortOrder").val("asc");
+                        }
+                    }
+                    $("#filterForm").trigger("submit");
+                });
+                $("#disciplineTable .activityFilter").change(function() {
+                    $("#example_active").val($(this).val());
+                    $("#filterForm").trigger("submit");
+                })
+                <c:if test="${criteria.example.active != null}">
+                $("#disciplineTable .activityFilter option[value='<c:out value="${criteria.example.active}"/>']").attr("selected", "selected");
+                </c:if>
+            });
+            function editDiscipline(id) {
+                location.href = "<c:url value="/disciplines/"/>" + id + "/edit.html";
+            }
+        </script>
 	</body>
 </html>

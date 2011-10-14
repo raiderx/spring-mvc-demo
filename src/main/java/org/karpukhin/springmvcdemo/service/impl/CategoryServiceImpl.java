@@ -52,6 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> getAllCategories() {
         CategorySearchCriteria criteria = new CategorySearchCriteria();
+        criteria.setSortColumn("id");
         return categoryDao.getCategoriesBySearchCriteria(criteria);
     }
 }
