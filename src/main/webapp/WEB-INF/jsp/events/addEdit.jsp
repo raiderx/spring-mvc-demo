@@ -32,10 +32,15 @@
                 </tr> <tr>
                     <td colspan="3">
                         <button type="submit"> Confirm </button>
+                        <button type="button" onclick="cancel();"> Cancel </button>
                     </td>
                 </tr>
             </table>
-
         </form:form>
+        <script type="text/javascript">
+            function cancel() {
+                location.href = "<c:url value="/disciplines/${event.disciplineId}/events.html"/>";
+            }
+        </script>
     </body>
 </html>
