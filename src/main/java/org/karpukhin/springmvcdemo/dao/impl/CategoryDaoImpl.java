@@ -63,10 +63,11 @@ public class CategoryDaoImpl extends AbstractEntityDaoImpl<Category> implements 
     protected List<Category> getAllEntities() {
         List<Category> categories = new ArrayList<Category>();
         categories.add(new Category(1, "Y", "General", true));
-        categories.add(new Category(1, "Y16", "Public junior", true));
-        categories.add(new Category(1, "N", "Ladies", true));
-        categories.add(new Category(1, "N16", "Junior women", true));
-        categories.add(new Category(1, "Y50", "Senior general", true));
+        categories.add(new Category(2, "Y16", "Public junior", true));
+        categories.add(new Category(3, "N", "Ladies", true));
+        categories.add(new Category(4, "N16", "Junior women", true));
+        categories.add(new Category(5, "Y50", "Senior general", true));
+        categories.add(new Category(5, "R", "Removed category", false));
         return categories;
     }
 

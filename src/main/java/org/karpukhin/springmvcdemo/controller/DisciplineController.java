@@ -21,8 +21,26 @@ public class DisciplineController {
     @Autowired
     private DisciplineService disciplineService;
 
+    /**
+     * Default constructor
+     */
+    public DisciplineController() {
+    }
+
+    /**
+     * Constructs controller with given {@link DisciplineService} implementation
+     */
+    public DisciplineController(DisciplineService disciplineService) {
+        this.disciplineService = disciplineService;
+    }
+
+    /**
+     * Returns view with list of disciplines found by given search criteria
+     * @param criteria discipline search criteria
+     * @return view with list of disciplines
+     */
     @RequestMapping("/disciplines")
-    public ModelAndView getDisciplinesList(@ModelAttribute("criteria") DisciplineSearchCriteria criteria) {
+    public ModelAndView getDisciplineList(@ModelAttribute("criteria") DisciplineSearchCriteria criteria) {
         List<Discipline> disciplines = disciplineService.getDisciplinesByCriteria(criteria);
         PagedListHolder<Discipline> result = new PagedListHolder<Discipline>(disciplines);
         result.setPageSize(10);
