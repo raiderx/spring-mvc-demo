@@ -12,30 +12,6 @@
 		<title> Events </title>
         <link href="${pageContext.request.contextPath}/css/default.css" rel="stylesheet" type="text/css"/>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.6.4.js"> </script>
-		<script type="text/javascript">
-			$(function() {
-                $("#eventTable thead td[sortableColumn]").click(function() {
-                    if ($("#sortColumn").val() != $(this).attr("sortableColumn")) {
-                        $("#sortOrder").val("asc");
-                        $("#sortColumn").val($(this).attr("sortableColumn"));
-                    } else {
-                        if ($("#sortOrder").val() == "asc") {
-                            $("#sortOrder").val("desc");
-                        } else {
-                            $("#sortOrder").val("asc");
-                        }
-                    }
-                    $("#filterForm").trigger("submit");
-                });
-                $("#eventTable .activityFilter").change(function() {
-                    $("#example_active").val($(this).val());
-                    $("#filterForm").trigger("submit");
-                })
-                <c:if test="${criteria.example.active != null}">
-                $("#eventTable .activityFilter option[value='<c:out value="${criteria.example.active}"/>']").attr("selected", "selected");
-                </c:if>
-			});
-		</script>
 	</head>
 	<body>
         <h1> <a href="<c:url value="/disciplines.html"/>"> Disciplines </a> &gt; Events  </h1>
@@ -76,6 +52,7 @@
 					<td> <c:out value="${event.name}"/> </td>
 					<td align="right">
                         <c:if test="${event.active == true}">
+                            <button onclick="editEvent(${event.id});"> Edit </button>
                             <button onclick="deleteEvent(${event.id});"> Delete </button>
                         </c:if>
                         <c:if test="${event.active ==false}">
@@ -106,5 +83,32 @@
             </table>
 		</div>
 
+        <script type="text/javascript">
+            $(function() {
+                $("#eventTable thead td[sortableColumn]").click(function() {
+                    if ($("#sortColumn").val() != $(this).attr("sortableColumn")) {
+                        $("#sortOrder").val("asc");
+                        $("#sortColumn").val($(this).attr("sortableColumn"));
+                    } else {
+                        if ($("#sortOrder").val() == "asc") {
+                            $("#sortOrder").val("desc");
+                        } else {
+                            $("#sortOrder").val("asc");
+                        }
+                    }
+                    $("#filterForm").trigger("submit");
+                });
+                $("#eventTable .activityFilter").change(function() {
+                    $("#example_active").val($(this).val());
+                    $("#filterForm").trigger("submit");
+                })
+                <c:if test="${criteria.example.active != null}">
+                $("#eventTable .activityFilter option[value='<c:out value="${criteria.example.active}"/>']").attr("selected", "selected");
+                </c:if>
+            });
+            function editEvent(id) {
+                location.href = "<c:url value="/events/"/>" + id + "/edit.html";
+            }
+        </script>
 	</body>
 </html>
