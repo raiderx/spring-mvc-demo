@@ -4,6 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fn" uri="/WEB-INF/tags/funcs.tld" %>
 
 <html>
     <head>
@@ -31,13 +32,19 @@
                             <c:forEach var="event" items="${events}">
                                 <tr>
                                     <td> <c:out value="${event.name}"/> </td>
-                                    <td> <form:checkboxes path="eventCategories[${event.id}]" items="${categories}"
-                                                     itemValue="id" itemLabel="name" delimiter="</td><td>"/> </td>
-                                    <%--<c:forEach var="category" items="${categories}">
-                                        <td>
-
-                                        </td>
-                                    </c:forEach>--%>
+                                    <%--<td> <form:checkboxes path="eventCategories[${event.id}]" items="${categories}"
+                                                          itemValue="id" itemLabel="name" delimiter="</td><td>"/> </td>--%>
+                                    <c:forEach var="c" items="${categories}">
+                                        <c:choose>
+                                            <c:when test="${fn:contains(discipline.eventCategories[event.id], c.id)}">
+                                                <c:set var="attrs">checked="checked"</c:set>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:set var="attrs"></c:set>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <td> <input type="checkbox" name="eventCategories[${event.id}]" value="${c.id}" <c:out value="${attrs}"/>/> </td>
+                                    </c:forEach>
                                 </tr>
                             </c:forEach>
                         </table>

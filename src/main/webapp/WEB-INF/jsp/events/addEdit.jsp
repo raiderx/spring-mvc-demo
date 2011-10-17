@@ -4,6 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fn" uri="/WEB-INF/tags/funcs.tld" %>
 
 <html>
     <head>
@@ -25,9 +26,30 @@
                     <td> <input type="text" value="<c:out value="${discipline.name}"/>" disabled="disabled" /> </td>
                     <td> </td>
                 </tr> <tr>
-                    <td></td>
-                    <td> <form:checkboxes path="categoryIds" items="${categories}"
-                                          itemValue="id" itemLabel="name"/> </td>
+                    <td> Categories </td>
+                    <td>
+                        <%--<form:checkboxes path="categoryIds" items="${categories}"
+                                         itemValue="id" itemLabel="name"/>--%>
+                        <table>
+                            <tr>
+                                <c:forEach var="c" items="${categories}">
+                                    <td> <c:out value="${c.name}"/> </td>
+                                </c:forEach>
+                            </tr> <tr>
+                                <c:forEach var="c" items="${categories}">
+                                    <c:choose>
+                                        <c:when test="${fn:contains(event.categoryIds, c.id)}">
+                                            <c:set var="attrs">checked="checked"</c:set>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:set var="attrs"></c:set>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <td> <input type="checkbox" name="categoryIds" value="${c.id}" <c:out value="${attrs}"/>/> </td>
+                                </c:forEach>
+                            </tr>
+                        </table>
+                    </td>
                     <td> </td>
                 </tr> <tr>
                     <td colspan="3">
