@@ -7,7 +7,13 @@ import java.util.Collection;
  */
 public class CollectionMethods {
 
-    public static boolean contains(Collection collection, Object el) {
-        return collection.contains(el);
+    /**
+     * Returns true if given collection contains the specified element
+     * @param collection collection
+     * @param element    element
+     * @return true if given collection contains the specified element
+     */
+    public static boolean contains(Collection collection, Object element) {
+        return collection.contains(element);
     }
 }

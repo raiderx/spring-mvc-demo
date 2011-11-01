@@ -59,7 +59,7 @@ public class EventController {
      * @param criteria     event search criteria
      * @return view with list of events
      */
-    @RequestMapping("/disciplines/{disciplineId}/events")
+    @RequestMapping("/disciplines/{disciplineId:\\d+}/events")
     public ModelAndView getEventList(@PathVariable("disciplineId") int disciplineId,
                                      @ModelAttribute("criteria") EventSearchCriteria criteria) {
         criteria.getExample().setDisciplineId(disciplineId);
