@@ -55,4 +55,15 @@ public class EventServiceImpl implements EventService {
     public Event getEventById(int eventId) {
         return eventDao.getById(eventId);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isEventUsed(int eventId) {
+        if (eventId == 18) {
+            return true;
+        }
+        return false;
+    }
 }

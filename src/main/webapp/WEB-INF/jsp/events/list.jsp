@@ -10,8 +10,16 @@
 <html>
 	<head>
 		<title> Events </title>
+        <link href="${pageContext.request.contextPath}/css/jquery/jquery.ui.all.css" rel="stylesheet" type="text/css"/>
         <link href="${pageContext.request.contextPath}/css/default.css" rel="stylesheet" type="text/css"/>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.6.4.js"> </script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.ui.core.js"> </script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.ui.widget.js"> </script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.ui.mouse.js"> </script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.ui.draggable.js"> </script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.ui.position.js"> </script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.ui.resizable.js"> </script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.ui.dialog.js"> </script>
 	</head>
 	<body>
         <h1> <a href="<c:url value="/disciplines.html"/>"> Disciplines </a> &gt; Events  </h1>
@@ -108,6 +116,68 @@
             });
             function editEvent(id) {
                 location.href = "<c:url value="/events/"/>" + id + "/edit.html";
+            }
+            function deleteEvent(id) {
+                ajaxDialog("eventRemoveDlg", "<c:url value="/events/"/>" + id + "/delete.html");
+            }
+            function ajaxDialog(id, url, options, data) {
+                var ajaxRequest;
+                var dialogHolder = $("<div id='"+id+"'/>");
+
+                function onDialogOpen() {
+
+                    //var form = dialogHolder.find(".dialogForm");
+                    //form.ajaxForm({ dataType: "json", success: onSubmit, data: options.extraFormData || {} });
+                    options.onOpen(dialogHolder);
+                }
+
+                function onDialogClose() {
+                    options.onClose();
+                    dialogHolder.dialog("destroy");
+                    dialogHolder.remove();
+                }
+
+                function openDialog(content) {
+                    dialogHolder.html(content);
+
+                    var form = dialogHolder.find(".dialogForm");
+
+                    options.title = options.title || form.attr("title") || "Dialog";
+                    options.width = options.width || parseInt(form.attr("width")) || 270;
+                    options.height = options.height || parseInt(form.attr("height")) || 230;
+
+                    form.removeAttr("title");
+                    form.removeAttr("width");
+                    form.removeAttr("height");
+
+                    dialogHolder.dialog(options);
+                    dialogHolder.dialog("open");
+                }
+
+                function errorHandler(xhr, textStatus, errorThrown) {
+                    alert("Error processing server request: " + xhr.status);
+                }
+
+                options = $.extend({
+                    type: "GET",
+                    autoOpen: false,
+                    modal: true,
+                    open: onDialogOpen,
+                    close: onDialogClose,
+                    onOpen: function(dialogHolder) {},
+                    onClose: function() {}
+                }, options || {});
+
+                if (ajaxRequest != null) {
+                    ajaxRequest.abort();
+                }
+                ajaxRequest = $.ajax({
+                    url: url,
+                    type: options.type,
+                    data: $.extend({ dialog: id }, data || {}),
+                    success: openDialog,
+                    error: errorHandler
+                });
             }
         </script>
 	</body>

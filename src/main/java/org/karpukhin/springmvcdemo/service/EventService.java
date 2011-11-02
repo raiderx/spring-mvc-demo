@@ -30,4 +30,11 @@ public interface EventService {
      * @return event
      */
     Event getEventById(int eventId);
+
+    /**
+     * Returns true if event with given id is used
+     * @param eventId event id
+     * @return true or false
+     */
+    boolean isEventUsed(int eventId);
 }
