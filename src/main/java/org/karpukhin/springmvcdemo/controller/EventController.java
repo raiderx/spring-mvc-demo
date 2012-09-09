@@ -106,9 +106,11 @@ public class EventController {
     }
 
     /**
-     *
-     * @param eventId
-     * @return
+     * Shows confirmation dialog if deleting of event with given id is allowed
+     * or message dialog otherwise
+     * @param eventId event id
+     * @param dialog  dialog id
+     * @return confirmation dialog
      */
     @RequestMapping(value = "/events/{eventId:\\d+}/delete", method = RequestMethod.GET)
     public ModelAndView deleteEvent(@PathVariable("eventId") int eventId,
@@ -126,6 +128,11 @@ public class EventController {
             .addObject("dialogInfo", dialogInfo);
     }
 
+    /**
+     * Deletes event with given id
+     * @param eventId event id
+     * @return success
+     */
     @RequestMapping(value = "/events/{eventId:\\d+}/confirmDelete")
     @ResponseBody
     public String confirmDeleteEvent(@PathVariable("eventId") int eventId) {

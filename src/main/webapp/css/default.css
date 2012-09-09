@@ -5,3 +5,6 @@
 .contentTable table {
     width: 100%;
 }
+
+.ui-dialog .ui-dialog-buttonpane { text-align: center; }
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset { float: none; }
